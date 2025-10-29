@@ -251,7 +251,12 @@ Please create engaging, visually descriptive comic panels that capture the key m
         Returns:
             List of ComicPanel objects with image_data populated
         """
+        if not self.generate_images:
+            return panels
+            
         print(f"Generating images for {len(panels)} panels...")
+        
+        billing_warning_shown = False
 
         for i, panel in enumerate(panels):
             try:
@@ -262,8 +267,18 @@ Please create engaging, visually descriptive comic panels that capture the key m
                 panel.image_data = image_data
 
             except Exception as e:
-                print(f"  Warning: Failed to generate image for panel {panel.panel_number}: {e}")
-                print(f"  Creating placeholder image...")
+                error_msg = str(e)
+                
+                # Check if it's a billing error and only show the warning once
+                if ("billed users" in error_msg.lower() or "billing" in error_msg.lower()) and not billing_warning_shown:
+                    print(f"\n  {'=' * 66}")
+                    print(f"  NOTE: Imagen API requires a billing account to generate images.")
+                    print(f"  Creating high-quality placeholder images for all panels instead.")
+                    print(f"  {'=' * 66}\n")
+                    billing_warning_shown = True
+                elif not billing_warning_shown:
+                    print(f"  Warning: Failed to generate image for panel {panel.panel_number}: {e}")
+                
                 # Create placeholder if generation fails
                 panel.image_data = self._create_placeholder_image(panel)
 
@@ -309,7 +324,12 @@ Please create engaging, visually descriptive comic panels that capture the key m
                 raise Exception("No images generated in response")
 
         except Exception as e:
-            print(f"    Imagen generation failed: {e}")
+            error_msg = str(e)
+            if "billed users" in error_msg.lower() or "billing" in error_msg.lower():
+                print(f"    ℹ Imagen API requires billing to be enabled")
+                print(f"    ℹ Using high-quality placeholder instead")
+            else:
+                print(f"    Imagen generation failed: {e}")
             raise
 
     def _create_placeholder_image(self, panel: ComicPanel, width: int = 512, height: int = 384) -> str:
