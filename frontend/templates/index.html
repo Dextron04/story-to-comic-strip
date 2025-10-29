@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Story to Comic Strip Generator</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Comic+Neue:wght@300;400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <h1 class="title">Story to Comic Strip Generator</h1>
+                <p class="subtitle">Transform your stories into engaging comic strips using AI</p>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Input Section -->
+            <section class="input-section">
+                <div class="card">
+                    <h2 class="section-title">Your Story</h2>
+
+                    <div class="form-group">
+                        <label for="story-input">Write or paste your story below:</label>
+                        <textarea
+                            id="story-input"
+                            class="story-textarea"
+                            placeholder="Once upon a time, there was a brave knight who embarked on a quest to save the kingdom...&#10;&#10;Enter your story here and watch it transform into a comic strip!"
+                            rows="10"
+                        ></textarea>
+                        <div class="character-count">
+                            <span id="char-count">0</span> characters
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="max-panels">Maximum number of panels:</label>
+                        <div class="slider-container">
+                            <input
+                                type="range"
+                                id="max-panels"
+                                class="slider"
+                                min="3"
+                                max="15"
+                                value="8"
+                            >
+                            <span class="slider-value" id="panels-value">8</span>
+                        </div>
+                    </div>
+
+                    <button id="generate-btn" class="btn btn-primary">
+                        <span class="btn-text">Generate Comic Strip</span>
+                        <span class="btn-icon">🎨</span>
+                    </button>
+
+                    <!-- Examples -->
+                    <div class="examples">
+                        <p class="examples-label">Try an example:</p>
+                        <div class="example-buttons">
+                            <button class="btn-example" data-example="knight">Knight's Quest</button>
+                            <button class="btn-example" data-example="explorer">Space Explorer</button>
+                            <button class="btn-example" data-example="detective">Mystery Detective</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Loading Section -->
+            <section id="loading-section" class="loading-section hidden">
+                <div class="loader">
+                    <div class="comic-bubble">
+                        <div class="dots">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </div>
+                    </div>
+                    <p class="loading-text">Generating your comic strip...</p>
+                </div>
+            </section>
+
+            <!-- Error Section -->
+            <section id="error-section" class="error-section hidden">
+                <div class="error-card">
+                    <div class="error-icon">⚠️</div>
+                    <h3 class="error-title">Oops! Something went wrong</h3>
+                    <p id="error-message" class="error-message"></p>
+                    <button id="dismiss-error" class="btn btn-secondary">Dismiss</button>
+                </div>
+            </section>
+
+            <!-- Output Section -->
+            <section id="output-section" class="output-section hidden">
+                <div class="card">
+                    <div class="output-header">
+                        <h2 class="section-title">Your Comic Strip</h2>
+                        <button id="download-btn" class="btn btn-secondary btn-small">
+                            Download 📥
+                        </button>
+                    </div>
+
+                    <div id="comic-panels" class="comic-panels">
+                        <!-- Panels will be dynamically inserted here -->
+                    </div>
+
+                    <button id="generate-another" class="btn btn-outline">
+                        Generate Another Comic
+                    </button>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>Made with ❤️ using Google Gemini API</p>
+            <p class="footer-link">
+                <a href="https://github.com/Dextron04/story-to-comic-strip" target="_blank">
+                    View on GitHub
+                </a>
+            </p>
+        </footer>
+    </div>
+
+    <!-- Example Stories Data -->
+    <script>
+        const exampleStories = {
+            knight: `Once upon a time, there was a brave knight named Sir Arthur who embarked on a quest to save the kingdom from a fearsome dragon.
+"I must find the dragon's lair," said Sir Arthur as he prepared his sword and shield.
+The journey was long and treacherous. He traveled through dark forests and crossed raging rivers.
+After many days, Sir Arthur finally reached the mountain where the dragon lived.
+"At last, I've found it!" he exclaimed, looking up at the smoking cave entrance.
+The dragon emerged with a mighty roar. "Who dares enter my domain?" it bellowed.
+"I am Sir Arthur, and I've come to free the kingdom from your terror!" the knight replied bravely.
+After a fierce battle, Sir Arthur discovered the dragon was only angry because a thorn was stuck in its foot.
+"Let me help you," said Sir Arthur, and he carefully removed the thorn.
+"Thank you, kind knight," said the dragon. "I will trouble the kingdom no more."`,
+
+            explorer: `Captain Zara piloted her spacecraft through the asteroid field with expert precision.
+"Computer, scan for signs of life on the nearby planet," she commanded.
+The ship's AI responded: "Life forms detected. Atmosphere breathable. Recommend landing."
+As Zara descended through the clouds, she gasped at the sight below - a civilization of crystal towers.
+"This is incredible! Command, are you seeing this?" she spoke into her communicator.
+Suddenly, a beam of light surrounded her ship, gently guiding it to a landing platform.
+Strange but friendly beings approached, their forms shimmering like living rainbows.
+"Welcome, traveler from the stars," they said telepathically. "We've been waiting for you."
+Zara smiled, realizing this was just the beginning of an extraordinary adventure.`,
+
+            detective: `Detective Sarah Chen examined the crime scene carefully, her keen eyes missing nothing.
+"The window was broken from the inside," she noted, studying the glass fragments.
+Her partner, Detective Mike Rodriguez, found a mysterious letter hidden in a book.
+"Sarah, you need to see this," he said urgently, holding up the old envelope.
+The letter contained a cryptic message: "The truth lies where the river meets the sky."
+"What could that mean?" Mike wondered aloud.
+Sarah's eyes lit up. "The Skybridge over the Hudson River! That's where we'll find our answer."
+They rushed to the location, where they discovered a safe deposit box key taped under the bridge.
+"Someone went through a lot of trouble to hide this," Sarah said, examining the key.
+"Let's see what secrets it unlocks," Mike replied, and they headed to the bank.`
+        };
+    </script>
+
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>

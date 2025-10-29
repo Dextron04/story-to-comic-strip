@@ -12,11 +12,13 @@ The **Story to Comic Strip Generator** is designed to:
 
 ## ✨ Features
 
+- **Web Interface**: Beautiful, responsive web application for easy story-to-comic conversion
 - **AI-Powered Story Analysis**: Uses Google Gemini API to understand story structure, characters, and scenes
 - **Automatic Panel Generation**: Creates comic strip panels based on story content
 - **Character Recognition**: Identifies and maintains character consistency across panels
 - **Scene Visualization**: Generates appropriate visual descriptions for each story segment
 - **Dialogue Extraction**: Automatically identifies and formats character dialogues for comic bubbles
+- **Python API**: Use as a Python library for programmatic access
 
 ## 🚀 How It Works
 
@@ -49,10 +51,45 @@ pip install -r requirements.txt
 
 3. Set up your Google Gemini API key:
 ```bash
+# Create a .env file
+cp .env.example .env
+
+# Edit .env and add your API key
+# GEMINI_API_KEY=your_api_key_here
+```
+
+Or export it directly:
+```bash
 export GEMINI_API_KEY="your_api_key_here"
 ```
 
+Get your API key from: [Google AI Studio](https://makersuite.google.com/app/apikey)
+
 ## 💡 Usage
+
+### Option 1: Web Application (Recommended)
+
+The easiest way to use the Story to Comic Strip Generator is through the web interface:
+
+1. Start the web server:
+```bash
+python app.py
+```
+
+2. Open your browser and navigate to:
+```
+http://localhost:5000
+```
+
+3. Features of the web interface:
+   - **Intuitive UI**: Clean, modern interface with a comic book theme
+   - **Live Preview**: See your comic panels generate in real-time
+   - **Example Stories**: Try pre-loaded example stories
+   - **Adjustable Panels**: Control the number of comic panels (3-15)
+   - **Download**: Export your comic strip as a text file
+   - **Responsive Design**: Works on desktop, tablet, and mobile devices
+
+### Option 2: Python API
 
 ```python
 from story_to_comic import StoryToComicGenerator
@@ -84,6 +121,29 @@ Narration: The journey was long and treacherous...
 
 Panel 3: [Scene: Mountain cave entrance]
 Knight: "At last, I've found it!"
+```
+
+## 📁 Project Structure
+
+```
+story-to-comic-strip/
+├── app.py                      # Main entry point for web application
+├── story_to_comic.py           # Core comic generation library
+├── example.py                  # Python API usage examples
+├── requirements.txt            # Project dependencies
+├── .env.example               # Environment variables template
+├── backend/
+│   ├── __init__.py
+│   └── api.py                 # Flask REST API
+├── frontend/
+│   ├── templates/
+│   │   └── index.html         # Main web interface
+│   └── static/
+│       ├── css/
+│       │   └── style.css      # Styles and themes
+│       └── js/
+│           └── app.js         # Frontend logic
+└── README.md
 ```
 
 ## 🎨 Use Cases
