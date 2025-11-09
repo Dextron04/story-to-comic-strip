@@ -10,6 +10,65 @@
     <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Comic+Neue:wght@300;400;700&display=swap" rel="stylesheet">
 </head>
 <body>
+    <!-- Genre Selection Modal -->
+    <!-- <div id="genre-modal" class="modal-overlay hidden">
+        <div class="modal-content">
+            <button class="modal-close" id="close-modal" aria-label="Close">&times;</button>
+            <div class="modal-header">
+                <h2 class="modal-title">Choose your Story Genre</h2>
+                <p class="modal-subtitle">Select a genre to get started with examples</p>
+            </div>
+
+            <div class="genre-grid">
+                <button class="genre-card" data-genre="superhero">
+                    <div class="genre-icon">Icon</div>
+                    <h3 class="genre-name">Superhero</h3>
+                    <p class="genre-desc">Epic battles and heroic deeds!</p>
+                </button>
+
+                <button class="genre-card" data-genre="fantasy">
+                    <div class="genre-icon">Icon</div>
+                    <h3 class="genre-name">Fantasy Quest</h3>
+                    <p class="genre-desc">Magic, Dragons, and adventure!</p>
+                </button>
+
+                <button class="genre-card" data-genre="mystery">
+                    <div class="genre-icon">Icon</div>
+                    <h3 class="genre-name">Mystery</h3>
+                    <p class="genre-desc">Solve crimes and puzzles!</p>
+                </button>
+
+                <button class="genre-card" data-genre="romance">
+                    <div class="genre-icon">Icon</div>
+                    <h3 class="genre-name">Romance</h3>
+                    <p class="genre-desc">Love stories and emotions!</p>
+                </button>
+
+                <button class="genre-card" data-genre="scifi">
+                    <div class="genre-icon">Icon</div>
+                    <h3 class="genre-name">Sci-Fi</h3>
+                    <p class="genre-desc">Explore the cosmos!</p>
+                </button>
+
+                <button class="genre-card" data-genre="comedy">
+                    <div class="genre-icon">Icon</div>
+                    <h3 class="genre-name">Comedy</h3>
+                    <p class="genre-desc">Funny and Lighthearted</p>
+                </button>
+
+                <button class="genre-card" data-genre="horror">
+                    <div class="genre-icon">Icon</div>
+                    <h3 class="genre-name">Horror</h3>
+                    <p class="genre-desc">Spooky and thrilling</p>
+                </button>
+            </div>
+
+            <div class="modal-footer">
+                <button id="skip-genre" class="skip-btn">Skip - I'll write my own</button>
+            </div>
+        </div>
+    </div> -->
+    
     <div class="container">
         <!-- Header -->
         <header class="header">
@@ -52,6 +111,19 @@
                             >
                             <span class="slider-value" id="panels-value">8</span>
                         </div>
+                    </div>
+
+                    <!-- Art style selector-->
+                    <div class="form-group">
+                        <label for="art-style">Art Style:</label>
+                        <select id="art-style" class="style-select">
+                            <option value="comic" selected>Comic Book</option>
+                            <option value="manga" selected>Manga</option>
+                            <option value="noir" selected>Noir</option>
+                            <option value="pixel" selected>Pixel Art</option>
+                            <option value="sketch" selected>Sketch</option>
+                        </select>
+                        <p class="style-helper-text">Choose the visual style for your comic panel</p>
                     </div>
 
                     <button id="generate-btn" class="btn btn-primary">
@@ -161,7 +233,10 @@ Sarah's eyes lit up. "The Skybridge over the Hudson River! That's where we'll fi
 They rushed to the location, where they discovered a safe deposit box key taped under the bridge.
 "Someone went through a lot of trouble to hide this," Sarah said, examining the key.
 "Let's see what secrets it unlocks," Mike replied, and they headed to the bank.`
+
         };
+
+        
     </script>
 
     <script src="{{ url_for('static', filename='js/app.js') }}"></script>

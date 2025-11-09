@@ -28,6 +28,9 @@ let currentComic = null;
  * Initialize the application
  */
 function init() {
+    // // Check if its the first thing user sees
+    // initGenreModal();
+    
     // Update character count
     storyInput.addEventListener('input', updateCharCount);
 
@@ -98,6 +101,9 @@ function handleExampleClick(e) {
 async function handleGenerate() {
     const story = storyInput.value.trim();
     const maxPanels = parseInt(maxPanelsSlider.value);
+    // Get the selected art style from dropdown
+    const artStyle = document.getElementById('art-style').value;
+    
 
     // Validate input
     if (!story) {
@@ -124,7 +130,9 @@ async function handleGenerate() {
             },
             body: JSON.stringify({
                 story: story,
-                max_panels: maxPanels
+                max_panels: maxPanels,
+                // Selected art style
+                // art_style: artStyle
             })
         });
 
@@ -348,6 +356,44 @@ function resetToInput() {
     storyInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
     storyInput.focus();
 }
+
+// function initGenreModal() {
+//     const modal = document.getElementById('genre-modal');
+//     if (!modal) return;
+
+//     // Show modal after a few seconds (on first visit)
+//     if (!localStorage.getItem('genre-modal-seen')) {
+//         setTimeout(() => modal.classList.remove('hidden'), 2000);
+//     }
+
+//     // When any genre card is clicked
+//     document.querySelectorAll('.genre-card').forEach(card => {
+//         card.onclick = () => {
+//             const genre = card.dataset.genre;
+//             const template = genreTemplates[genre];
+
+//             if (template) {
+//                 storyInput.value = template.prompt;
+//                 maxPanelsSlider.value = template.panels;
+//                 updateCharCount();
+//                 updateSliderValue();
+//             }
+//             closeModal();
+//         };
+//     });
+
+//     // Close modal with skip button, X button, or clicking out, ESC key
+//     document.getElementById('skip-genre').onclick = closeModal;
+//     document.getElementById('close-modal').onclick = closeModal;
+//     modal.onclick = (e) => e.target === modal && closeModal();
+//     document.onkeydown = (e) => e.key === 'Escape' && closeModal();
+
+//     // Close function
+//     function closeModal() {
+//         modal.classList.add('hidden');
+//         localStorage.setItem('genre-modal-seen', 'true');
+//     }
+// }
 
 /**
  * Check API configuration on load
