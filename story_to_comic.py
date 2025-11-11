@@ -98,7 +98,7 @@ class StoryToComicGenerator:
         self.text_model_name = 'gemini-2.0-flash-exp'
         
         # Image generation model
-        self.image_model_name = 'imagen-3.0-generate-002'
+        self.image_model_name = 'imagen-4.0-generate-001'
         self.image_generation_available = True
 
     def generate_comic(self, story: str, max_panels: int = 10) -> List[ComicPanel]:
@@ -311,13 +311,45 @@ Please create engaging, visually descriptive comic panels that capture the key m
             if response.generated_images and len(response.generated_images) > 0:
                 # Get the first generated image
                 generated_image = response.generated_images[0]
-                
-                # The image is already a PIL Image object
-                img_data = BytesIO()
-                generated_image.image.save(img_data, format='PNG')
-                img_data.seek(0)
-                image_base64 = base64.b64encode(img_data.read()).decode('utf-8')
-                
+
+                # The SDK may return different types for the image payload depending
+                # on the SDK version or model. Handle common cases robustly:
+                # - bytes/bytearray
+                # - a PIL Image-like object with .save()
+                # - an object with raw bytes on attributes like 'content' or 'image_bytes'
+                img_bytes = None
+
+                # Case A: raw bytes
+                if isinstance(generated_image.image, (bytes, bytearray)):
+                    img_bytes = bytes(generated_image.image)
+
+                # Case B: object with a save() method (PIL Image or similar)
+                else:
+                    img_obj = generated_image.image
+                    # Try saving with explicit format first, then without
+                    try:
+                        img_io = BytesIO()
+                        # Some implementations accept format kw, others don't
+                        img_obj.save(img_io, format='PNG')
+                        img_bytes = img_io.getvalue()
+                    except TypeError:
+                        try:
+                            img_io = BytesIO()
+                            img_obj.save(img_io)
+                            img_bytes = img_io.getvalue()
+                        except Exception:
+                            # Try common attribute names that may contain raw bytes
+                            for attr in ('content', 'image_bytes', 'data', 'bytes'):
+                                val = getattr(img_obj, attr, None)
+                                if isinstance(val, (bytes, bytearray)):
+                                    img_bytes = bytes(val)
+                                    break
+
+                if not img_bytes:
+                    raise Exception('Unable to extract image bytes from SDK response')
+
+                image_base64 = base64.b64encode(img_bytes).decode('utf-8')
+
                 print(f"    ✓ Image generated successfully")
                 return image_base64
             else:
