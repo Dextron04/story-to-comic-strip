@@ -580,7 +580,7 @@ body {
     }
 }
 
-/* .style-select {
+.style-select {
     width: 100%;
     padding: 12px 15px;
     border: 2px solid var(--border-color);
@@ -624,4 +624,127 @@ body {
     color: var(--primary-color);
     margin-top: 8px;
     font-weight: 600;
+}
+
+/* .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(5px);
+    opacity: 1;
+    transition: opacity 0.3s ease;
+}
+
+.modal-overlay.hidden {
+    display: none;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.modal-content {
+    background-color: #fff;
+    width: 90%;
+    max-width: 800px;
+    border-radius: 20px;
+    padding: 2rem;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    position: relative;
+    max-height: 90vh;
+    overflow-y: auto;
+    border: 4px solid #000;
+}
+
+.modal-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.modal-title {
+    font-family: 'Bangers', cursive;
+    font-size: 2.5rem;
+    color: #333;
+    letter-spacing: 1px;
+    margin-bottom: 0.5rem;
+}
+
+.modal-close {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 2rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #666;
+}
+
+.genre-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.genre-card {
+    background: #f8f9fa;
+    border: 2px solid #e9ecef;
+    border-radius: 12px;
+    padding: 1.5rem 1rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: center;
+}
+
+.genre-card * {
+    pointer-events: none;
+}
+
+.genre-card:hover {
+    transform: translateY(-5px);
+    border-color: #3498db;
+    box-shadow: 0 5px 15px rgba(52, 152, 219, 0.2);
+    background: #eef7fd;
+}
+
+.genre-icon {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+}
+
+.genre-name {
+    font-family: 'Bangers', cursive;
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+    color: #2c3e50;
+}
+
+.genre-desc {
+    font-size: 0.85rem;
+    color: #666;
+    line-height: 1.4;
+}
+
+.skip-btn {
+    background: transparent;
+    border: 2px solid #ccc;
+    padding: 0.8rem 2rem;
+    border-radius: 50px;
+    cursor: pointer;
+    font-weight: bold;
+    color: #666;
+    display: block;
+    margin: 0 auto;
+    transition: all 0.2s;
+}
+
+.skip-btn:hover {
+    border-color: #333;
+    color: #333;
 } */

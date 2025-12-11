@@ -24,6 +24,38 @@ const API_BASE_URL = window.location.origin;
 // State
 let currentComic = null;
 
+// Genre modal prefixed settings
+const genreSettings = {
+    superhero: {
+        style: 'comic',
+        text: 'The city was in chaos. Dr, Void has unleased his robot army on the city, and only one hero could stop him...'
+    },
+    fantasy: {
+        style: 'sketch',
+        text: 'In the ancient kingdom of Eldoria, a young mage discovered a glowing map hidden inside an old spellbook...'
+    },
+    mystery: {
+        style: 'noir',
+        text: "It was a rainy Tuesday night when the call came in. The famous Ruby of Calcutta had vanished from the museum vault without a trace..."
+    },
+    romance: {
+        style: 'manga',
+        text: "Classes were over, and the cherry blossoms were falling. Alex gathered the courage to finally speak to Sam by the school gates..."
+    },
+    scifi: {
+        style: 'pixel',
+        text: "Commander Rex checked the ship's sensors. The unknown planet wasn't just uninhabited—it was artificial..."
+    },
+    comedy: {
+        style: 'comic',
+        text: "Bob the builder bought a hammer that was afraid of nails. Every time he tried to build something, the hammer would scream..."
+    },
+    horror: {
+        style: 'noir',
+        text: "The old cabin in the woods had been abandoned for decades, or so they thought until they saw the light flicker in the attic window..."
+    }
+};
+
 /**
  * Initialize the application
  */
@@ -32,7 +64,7 @@ function init() {
     // initGenreModal();
     
     // Update character count
-    storyInput.addEventListener('input', updateCharCount);
+    // storyInput.addEventListener('input', updateCharCount);
 
     // Update slider value display
     maxPanelsSlider.addEventListener('input', updateSliderValue);
@@ -104,7 +136,6 @@ async function handleGenerate() {
     // Get the selected art style from dropdown
     const artStyle = document.getElementById('art-style').value;
     
-
     // Validate input
     if (!story) {
         showError('Please enter a story to generate a comic strip.');
@@ -132,7 +163,7 @@ async function handleGenerate() {
                 story: story,
                 max_panels: maxPanels,
                 // Selected art style
-                // art_style: artStyle
+                art_style: artStyle
             })
         });
 
@@ -357,43 +388,103 @@ function resetToInput() {
     storyInput.focus();
 }
 
-// function initGenreModal() {
-//     const modal = document.getElementById('genre-modal');
-//     if (!modal) return;
+function initGenreModal() {
+    // Genre Modal elements
+    const genreModal = document.getElementById('genre-modal');
+    const genreGrid = document.querySelector('.genre-grid');
+    const closeModalBtn = document.getElementById('close-modal');
+    const skipBtn = document.getElementById('skip-genre');
+    
+    if (!genreModal) {
+        console.error("Genre Modal ID not found in HTML");
+        return;
+    }
+    setTimeout(() => {
+        genreModal.classList.remove('hidden');
+    }, 500);
+    
+    // sessionStorage.setItem('modalShown', 'true');
+    const closeModal = () => {
+        genreModal.classList.add('hidden');
+    };
 
-//     // Show modal after a few seconds (on first visit)
-//     if (!localStorage.getItem('genre-modal-seen')) {
-//         setTimeout(() => modal.classList.remove('hidden'), 2000);
-//     }
+    if (closeModalBtn) {
+        closeModalBtn.addEventListener('click', closeModal);
+    }
 
-//     // When any genre card is clicked
-//     document.querySelectorAll('.genre-card').forEach(card => {
-//         card.onclick = () => {
-//             const genre = card.dataset.genre;
-//             const template = genreTemplates[genre];
+    if (skipBtn) {
+        skipBtn.addEventListener('click', closeModal);
+    }
 
-//             if (template) {
-//                 storyInput.value = template.prompt;
-//                 maxPanelsSlider.value = template.panels;
-//                 updateCharCount();
-//                 updateSliderValue();
-//             }
-//             closeModal();
-//         };
-//     });
+    genreModal.addEventListener('click', (e) => {
+        if (e.target === genreModal) {
+            closeModal();
+        }
+    });
 
-//     // Close modal with skip button, X button, or clicking out, ESC key
-//     document.getElementById('skip-genre').onclick = closeModal;
-//     document.getElementById('close-modal').onclick = closeModal;
-//     modal.onclick = (e) => e.target === modal && closeModal();
-//     document.onkeydown = (e) => e.key === 'Escape' && closeModal();
+    genreCards.forEach(card => {
+        card.addEventListener('click', function(e) {
+            // Stop any weird default browser behavior
+            e.preventDefault();
+            // e.stopPropagation();
 
-//     // Close function
-//     function closeModal() {
-//         modal.classList.add('hidden');
-//         localStorage.setItem('genre-modal-seen', 'true');
-//     }
-// }
+            // Get the genre from the clicked card
+            const genre = this.getAttribute('data-genre');
+            console.log("CLICK DETECTED on genre:", genre); // Debug message
+
+            const setting = genreSettings[genre];
+
+            if (setting) {
+                
+                // 1. Set the Art Style Dropdown
+                if (artStyleSelect) {
+                    artStyleSelect.value = setting.style;
+                }
+                if (storyInput) {
+                    storyInput.value = setting.text;
+                }
+
+                // 2. Set the Story Text Box
+                // storyInput.value = setting.text;
+
+                // 3. Update the character count number
+                updateCharCount();
+
+                // 4. Close the popup
+                closeModal();
+
+                if (storyInput) {
+                    storyInput.scrollIntoView({ behavior: 'smooth', block: 'center'});
+                    storyInput.focus();
+
+                }
+                if (generateBtn) {
+                    generateBtn.click();
+                }
+                // 5. Scroll to the text box so user can see it
+                // storyInput.scrollIntoView({ behavior: 'smooth', block: 'center'});
+                // storyInput.focus();
+            } else {
+                console.error("No settings defined for genre:", genre);
+            }
+        });
+    });
+}
+
+
+function updateCharCount() {
+    if (!storyInput || !charCount) {
+        return;
+    }
+    const count = storyInput.value.length;
+    charCount.textContent = count.toLocaleString();
+}
+
+    // Close function
+function closeModal() {
+    modal.classList.add('hidden');
+    localStorage.setItem('genre-modal-seen', 'true');
+}
 
 /**
  * Check API configuration on load
