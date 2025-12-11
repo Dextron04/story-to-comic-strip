@@ -234,6 +234,10 @@ function createPanelElement(panel) {
         panelDiv.appendChild(imageContainer);
     }
 
+    // Panel content wrapper for text elements
+    const contentDiv = document.createElement('div');
+    contentDiv.className = 'panel-content';
+
     // Scene
     const sceneDiv = document.createElement('div');
     sceneDiv.className = 'panel-scene';
@@ -248,14 +252,14 @@ function createPanelElement(panel) {
     sceneText.textContent = panel.scene;
     sceneDiv.appendChild(sceneText);
 
-    panelDiv.appendChild(sceneDiv);
+    contentDiv.appendChild(sceneDiv);
 
     // Narration (if exists)
     if (panel.narration) {
         const narrationDiv = document.createElement('div');
         narrationDiv.className = 'panel-narration';
         narrationDiv.textContent = panel.narration;
-        panelDiv.appendChild(narrationDiv);
+        contentDiv.appendChild(narrationDiv);
     }
 
     // Dialogues
@@ -275,8 +279,10 @@ function createPanelElement(panel) {
             dialogueContainer.appendChild(dialogueBubble);
         });
 
-        panelDiv.appendChild(dialogueContainer);
+        contentDiv.appendChild(dialogueContainer);
     }
+
+    panelDiv.appendChild(contentDiv);
 
     return panelDiv;
 }
